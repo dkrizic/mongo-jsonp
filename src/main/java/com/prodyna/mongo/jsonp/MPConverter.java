@@ -31,7 +31,15 @@ public class MPConverter {
         final JsonObjectBuilder job = createObjectBuilder();
         for (String key : dbObject.keySet()) {
             final Object value = dbObject.get(key);
-            System.out.println("Array element is " + value);
+            if( value instanceof String ) {
+                job.add( key, (String) value );
+            } else if( value instanceof BasicDBList ) {
+                job.add( key, convert( (BasicDBList) value ) );
+            } else if( value instanceof DBObject ) {
+                job.add( key, convert( (DBObject) value ) );
+            } else {
+                throw new IllegalStateException("Unexpected value type " + value.getClass().getName() + " for DBObject found");
+            }
         }
         return job.build();
     }
@@ -41,7 +49,15 @@ public class MPConverter {
         Iterator<Object> i = dbList.iterator();
         while (i.hasNext()) {
             Object value = i.next();
-            System.out.println("Array element is " + value);
+            if( value instanceof String ) {
+                jab.add( (String) value );
+            } else if( value instanceof BasicDBList ) {
+                jab.add( convert( (BasicDBList) value ) );
+            } else if( value instanceof DBObject ) {
+                jab.add( convert( (DBObject) value ) );
+            } else {
+                throw new IllegalStateException("Unexpected value type " + value.getClass().getName() + " for DBList found");
+            }
         }
         return jab.build();
     }
