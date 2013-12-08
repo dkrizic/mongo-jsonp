@@ -2,6 +2,7 @@ package com.prodyna.mongo.jsonp;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
+import org.bson.types.ObjectId;
 
 import javax.inject.Named;
 import javax.json.JsonArray;
@@ -33,6 +34,10 @@ public class MPConverter {
             final Object value = dbObject.get(key);
             if( value instanceof String ) {
                 job.add( key, (String) value );
+            } else if( value instanceof ObjectId ) {
+                ObjectId id = (ObjectId) value;
+                JsonObject obj = createObjectBuilder().add("$oid", id.toString() ).build();
+                job.add( key, obj ) ;
             } else if( value instanceof BasicDBList ) {
                 job.add( key, convert( (BasicDBList) value ) );
             } else if( value instanceof DBObject ) {
