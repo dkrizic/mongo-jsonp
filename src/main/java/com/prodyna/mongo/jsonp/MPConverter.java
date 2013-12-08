@@ -36,8 +36,7 @@ public class MPConverter {
                 job.add( key, (String) value );
             } else if( value instanceof ObjectId ) {
                 ObjectId id = (ObjectId) value;
-                JsonObject obj = createObjectBuilder().add("$oid", id.toString() ).build();
-                job.add( key, obj ) ;
+                job.add( key, id.toString() ) ;
             } else if( value instanceof BasicDBList ) {
                 job.add( key, convert( (BasicDBList) value ) );
             } else if( value instanceof DBObject ) {
